@@ -1923,7 +1923,7 @@ EOF
 #    --> administrative users are only craig and celia'.
 #
 $Conf{CgiAdminUserGroup} = 'backuppc';
-$Conf{CgiAdminUsers}     = 'backuppc';
+$Conf{CgiAdminUsers}     = 'sysadmin jbove cjeanneret mremy mbornoz marc ckaenzig';
 
 #
 # URL of the BackupPC_Admin CGI script.  Used for email messages.

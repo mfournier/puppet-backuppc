@@ -291,7 +291,12 @@ $Conf{BackupPCUser} = 'backuppc';
 #                with configure.pl to change InstallDir.
 #   CgiDir     - Apache CGI directory for BackupPC_Admin
 #
+<% if has_variable?("backuppc_topdir") %>
+$Conf{TopDir}      = '<%= backuppc_topdir %>';
+<% else %>
 $Conf{TopDir}      = '/var/lib/backuppc';
+<% end %>
+
 $Conf{ConfDir}     = '/etc/backuppc';
 $Conf{LogDir}      = '';
 $Conf{InstallDir}  = '/usr/share/backuppc';
@@ -362,7 +367,11 @@ $Conf{ServerInitdStartCmd} = '';
 # time taken for the backup, plus the granularity of $Conf{WakeupSchedule}
 # will make the actual backup interval a bit longer.
 #
+<% if has_variable?("backuppc_full_period") %>
+$Conf{FullPeriod} = <%= backuppc_full_period %>;
+<% else %>
 $Conf{FullPeriod} = 6.97;
+<% end %>
 
 #
 # Minimum period in days between incremental backups (a user requested
@@ -372,7 +381,11 @@ $Conf{FullPeriod} = 6.97;
 # time taken for the backup, plus the granularity of $Conf{WakeupSchedule}
 # will make the actual backup interval a bit longer.
 #
-$Conf{IncrPeriod} = 0.97;
+<% if has_variable?("backuppc_incr_period") %>
+$Conf{IncrPeriod} = <%= backuppc_incr_period %>;
+<% else %>
+$Conf{IncrPeriod} = 6.97;
+<% end %>
 
 #
 # Number of full backups to keep.  Must be >= 1.
@@ -447,7 +460,12 @@ $Conf{IncrPeriod} = 0.97;
 #    $Conf{FullKeepCnt} = 4;
 #    $Conf{FullKeepCnt} = [4];
 #
+<% if has_variable?("backuppc_full_keep_cnt") %>
+$Conf{FullKeepCnt}      = <%= backuppc_full_keep_cnt %>;
+<% else %>
 $Conf{FullKeepCnt} = 1;
+<% end %>
+
 
 #
 # Very old full backups are removed after $Conf{FullAgeMax} days.  However,
@@ -459,7 +477,11 @@ $Conf{FullKeepCnt} = 1;
 # full backups to exceed $Conf{FullAgeMax}.
 #
 $Conf{FullKeepCntMin} = 1;
-$Conf{FullAgeMax}     = 90;
+<% if has_variable?("backuppc_full_age_max") %>
+$Conf{FullAgeMax}      = <%= backuppc_full_age_max %>;
+<% else %>
+$Conf{FullAgeMax}  = 90;
+<% end %>
 
 #
 # Number of incremental backups to keep.  Must be >= 1.
@@ -476,7 +498,11 @@ $Conf{IncrKeepCnt} = 6;
 # matter how old they are.
 #
 $Conf{IncrKeepCntMin} = 1;
-$Conf{IncrAgeMax}     = 30;
+<% if has_variable?("backuppc_incr_age_max") %>
+$Conf{IncrAgeMax}      = <%= backuppc_incr_age_max %>;
+<% else %>
+$Conf{IncrAgeMax}  = 30;
+<% end %>
 
 #
 # Level of each incremental.  "Level" follows the terminology
@@ -722,7 +748,11 @@ $Conf{BackupFilesOnly} = undef;
 #       '*' => ['/junk', '/dont_back_this_up'], # these are for other shares
 #    };
 #
+<% if has_variable?("backuppc_backup_files_exclude") %>
+$Conf{BackupFilesExclude}      = <%= backuppc_backup_files_exclude %>;
+<% else %>
 $Conf{BackupFilesExclude} = undef;
+<% end %>
 
 #
 # PCs that are always or often on the network can be backed up after
@@ -1923,7 +1953,7 @@ EOF
 #    --> administrative users are only craig and celia'.
 #
 $Conf{CgiAdminUserGroup} = 'backuppc';
-$Conf{CgiAdminUsers}     = 'backuppc';
+$Conf{CgiAdminUsers}     = '<%= backuppc_admin_users %>';
 
 #
 # URL of the BackupPC_Admin CGI script.  Used for email messages.

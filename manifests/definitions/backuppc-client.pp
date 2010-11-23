@@ -3,5 +3,6 @@ define backuppc::client($ensure=present, $email, $username='') {
     ensure => $ensure,
     line   => "${fqdn} 0 ${email} ${username}",
     tag    => "backuppc-client",
+    notify => Service["backuppc"]
   }
 }
