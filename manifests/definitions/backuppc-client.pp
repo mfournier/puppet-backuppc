@@ -1,8 +1,9 @@
 define backuppc::client($ensure=present, $email, $username='') {
-  @@line {"":
-    ensure => $ensure,
-    line   => "${fqdn} 0 ${email} ${username}",
-    tag    => "backuppc-client",
-    notify => Service["backuppc"]
+  @@common::concatfilepart {"$name":
+    ensure  => $ensure,
+    content => "${fqdn} 0 ${email} ${username}\n",
+    tag     => "backuppc-client",
+    notify  => Service["backuppc"],
+    file    => "/etc/backuppc/hosts",
   }
 }
