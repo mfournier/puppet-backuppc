@@ -59,6 +59,7 @@ node "ns1.domain.tld" {
 }
 
 */
+
 class backuppc {
   
   include apache
@@ -153,7 +154,7 @@ class backuppc {
   }
 
   # Write a line in /etc/backuppc/hosts to include every clients
-  Common::Concatfilepart <<| tag == $backuppc_server_tag |>> 
+  Common::Concatfilepart <<| tag == 'backuppc_client' |>> 
 
   # Reload backuppc server to refresh hosts list
   service {"backuppc":
