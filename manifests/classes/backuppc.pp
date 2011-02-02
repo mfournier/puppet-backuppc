@@ -62,8 +62,6 @@ node "ns1.domain.tld" {
 
 class backuppc {
   
-  include apache
-  
   package {"backuppc":
     ensure => present,
   }
@@ -74,32 +72,6 @@ class backuppc {
     owner => backuppc,
     group => www-data,
     require => Package['backuppc']
-  }
-
-  apache::vhost{"$fqdn":
-    ensure => present,
-  }
-
-  # Configure the web interface
-  apache::directive {"backuppc":
-    ensure => present,
-    vhost => $fqdn,
-    directive => "Alias /backuppc /usr/share/backuppc/cgi-bin
-<Location /backuppc>
-    Options ExecCGI FollowSymlinks
-    AddHandler cgi-script .cgi
-    DirectoryIndex index.cgi
-</Location>
-",
-  }
-  
-  # Configure the ldap authentication
-  apache::auth::basic::ldap{"backuppc":
-    ensure => present,
-    vhost => $fqdn,
-    location => "/backuppc",
-    authLDAPUrl => 'ldap://ldap.lsn.camptocamp.com ldap.cby.camptocamp.com/dc=ldap,dc=c2c?uid??(|(gidNumber=1029)(sambaSID=*))',
-    authLDAPGroupAttribute => "memberUid",
   }
 
   file {"/var/lib/backuppc/.ssh":
@@ -150,11 +122,12 @@ class backuppc {
   # Create header of /etc/backuppc/hosts file
   common::concatfilepart {"000-backuppc.hosts":
     file => "/etc/backuppc/hosts",
+    notify  => Service["backuppc"],
     content => "host        dhcp    user    moreUsers     # <--- do not edit this line\n",
   }
 
   # Write a line in /etc/backuppc/hosts to include every clients
-  Common::Concatfilepart <<| tag == 'backuppc_client' |>> 
+  Common::Concatfilepart <<| tag == $backuppc_server_tag |>> 
 
   # Reload backuppc server to refresh hosts list
   service {"backuppc":
